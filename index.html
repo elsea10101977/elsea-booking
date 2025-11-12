@@ -338,29 +338,119 @@
 <a class="wa" href="https://wa.me/33622929178" aria-label="WhatsApp">✆</a>
 
 <script>
+ <script>
+  // Год в футере
   document.getElementById('year').textContent = new Date().getFullYear();
-  document.getElementById('form').addEventListener('submit', (e)=>{
+
+  // Переключение карт (если есть вкладки)
+  const tabs = document.querySelectorAll('.tab');
+  const mapJT = document.getElementById('map-jt');
+  const mapDR = document.getElementById('map-dr');
+  if (tabs.length) {
+    tabs.forEach(t=>t.addEventListener('click', ()=>{
+      tabs.forEach(x=>x.classList.remove('active'));
+      t.classList.add('active');
+      const k = t.getAttribute('data-map');
+      if(k==='jt'){ mapJT.style.display='block'; mapDR.style.display='none'; }
+      else{ mapJT.style.display='none'; mapDR.style.display='block'; }
+    }));
+  }
+
+  // --- КОРЗИНА ---
+  const cartEl = document.getElementById('cart');
+  const cartEmptyEl = document.getElementById('cart-empty');
+  const discountEl = document.getElementById('discount');
+  const totalEl = document.getElementById('total');
+  const addBtns = document.querySelectorAll('.add');
+
+  const cart = []; // [{name, price}]
+  function format(n){ return `${n.toFixed(2)} €`; }
+
+  function renderCart(){
+    cartEl.innerHTML = '';
+    if(cart.length===0){
+      cartEl.style.display='none';
+      cartEmptyEl.style.display='block';
+      totalEl.value = '';
+      return;
+    }
+    cartEl.style.display='block';
+    cartEmptyEl.style.display='none';
+    cart.forEach((item, idx)=>{
+      const li = document.createElement('li');
+      li.style.display='flex';
+      li.style.alignItems='center';
+      li.style.justifyContent='space-between';
+      li.style.gap='10px';
+      li.style.padding='10px 0';
+      li.style.borderBottom='1px solid #f0e7ea';
+      li.innerHTML = `<span>${item.name}</span><div style="display:flex;align-items:center;gap:10px"><strong>${format(item.price)}</strong><button aria-label="remove" data-i="${idx}" class="tab">✕</button></div>`;
+      cartEl.appendChild(li);
+    });
+    calcTotal();
+  }
+
+  function calcTotal(){
+    const base = cart.reduce((s,i)=>s + (i.price||0), 0);
+    const d = (discountEl?.value || '').trim();
+    let final = base;
+    if (d){
+      const pct = d.match(/-?\s*(\d{1,3})\s*%/);
+      const eur = d.match(/-?\s*(\d+(?:[.,]\d+)*)\s*€?$/);
+      if (pct){ final = Math.max(0, base * (1 - Number(pct[1])/100)); }
+      else if (eur){ final = Math.max(0, base - Number(String(eur[1]).replace(',', '.'))); }
+    }
+    totalEl.value = format(final);
+    return { base, final, discountText: d };
+  }
+
+  addBtns.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      cart.push({ name: btn.dataset.name, price: Number(btn.dataset.price) });
+      renderCart();
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    });
+  });
+
+  cartEl.addEventListener('click', (e)=>{
+    const i = e.target?.dataset?.i;
+    if(i !== undefined){
+      cart.splice(Number(i),1);
+      renderCart();
+    }
+  });
+  discountEl?.addEventListener('input', calcTotal);
+
+  // --- ОТПРАВКА ЗАЯВКИ В WHATSAPP ИЗ ФОРМЫ "Réserver en ligne" ---
+  const frm = document.getElementById('form');
+  frm.addEventListener('submit', (e)=>{
     e.preventDefault();
-    const data = {
-      name: document.getElementById('name').value.trim(),
-      phone: document.getElementById('phone').value.trim(),
-      date: document.getElementById('date').value,
-      time: document.getElementById('time').value,
-      loc: document.getElementById('location').value,
-      srv: document.getElementById('service').value,
-      note: document.getElementById('note').value.trim()
-    };
-    const txt = `Bonjour! Je souhaite prendre rendez-vous.\nNom: ${data.name}\nTéléphone: ${data.phone}\nPrestation: ${data.srv}\nDate & heure: ${data.date} ${data.time}\nLieu: ${data.loc}\n${data.note?`Message: ${data.note}\n`:``}`;
+    const name = document.getElementById('name').value.trim();
+    const phone= document.getElementById('phone').value.trim();
+    const date = document.getElementById('date').value;
+    const time = document.getElementById('time').value;
+    const loc  = document.getElementById('location').value;
+    const note = (document.getElementById('note')?.value || '').trim();
+    const { base, final, discountText } = calcTotal();
+
+    const list = cart.length ? cart.map((i,idx)=>`${idx+1}. ${i.name} — ${format(i.price)}`).join('\n') : '—';
+
+    const txt =
+`Bonjour! Je souhaite prendre rendez-vous.
+Nom: ${name}
+Téléphone: ${phone}
+Date & heure: ${date} ${time}
+Lieu: ${loc}
+
+Prestations choisies:
+${list}
+
+Sous-total: ${format(base)}
+${discountText ? `Remise: ${discountText}\n` : ''}Total estimé: ${format(final)}
+${note ? `\nMessage: ${note}\n` : ''}`;
+
     window.open("https://wa.me/33622929178?text=" + encodeURIComponent(txt), "_blank");
   });
-  const tabs = document.querySelectorAll('.tab');
-  const mapJT=document.getElementById('map-jt'),mapDR=document.getElementById('map-dr');
-  tabs.forEach(t=>t.addEventListener('click',()=>{
-    tabs.forEach(x=>x.classList.remove('active'));
-    t.classList.add('active');
-    if(t.dataset.map==='jt'){mapJT.style.display='block';mapDR.style.display='none';}
-    else{mapJT.style.display='none';mapDR.style.display='block';}
-  }));
 </script>
 </body>
 </html>
