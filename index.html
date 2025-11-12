@@ -1,5 +1,18 @@
 <!doctype html>
 <html lang="fr">
+<style>
+.group { border:1px solid #f0d9df; border-radius:16px; margin:16px 0; background:#fff; }
+.group-toggle{
+  width:100%; text-align:left; padding:14px 16px; border:0; background:#f7eaee;
+  font-weight:600; border-radius:16px 16px 0 0; display:flex; justify-content:space-between; align-items:center;
+}
+.group-body{ padding:12px 14px; }
+.group[hidden] { display:none; }
+.cards{ display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:12px; }
+.card{ background:#fff; border:1px solid #f3e1e6; border-radius:14px; padding:14px; }
+.chev{ opacity:.7; }
+</style>
+ 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -668,6 +681,17 @@ ${note ? `\nMessage: ${note}\n` : ''}`;
       }
     });
   }
+</script>
+<script>
+document.querySelectorAll('.group-toggle').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const wrap = btn.closest('.group');
+    const body = btn.nextElementSibling;
+    const open = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', String(!open));
+    body.hidden = open;
+  });
+});
 </script>
 
 </body>
