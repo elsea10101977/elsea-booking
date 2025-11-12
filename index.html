@@ -1,12 +1,241 @@
 <!doctype html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Elsea Esthetic — Réservation</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Elsea Esthetic — Réservation</title>
+  <meta name="description" content="Elsea Esthetic · Microshading, maquillage permanent, LPG. Réservez en ligne à Joué-lès-Tours." />
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      /* Пыльная роза + светлые акценты */
+      --rose:#E7C3CB;          /* dusty rose */
+      --rose-200:#F6EEF0;      /* самый светлый фон */
+      --rose-300:#EDD6DB;      /* карточки */
+      --ink:#3A2E33;           /* тёмный текст */
+      --muted:#7E6D73;         /* подписи */
+      --white:#ffffff;
+      --shadow: 0 10px 25px rgba(58,46,51,.08);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;font-family:Manrope,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:var(--rose-200)}
+    a{color:inherit}
+    .container{max-width:1050px;margin:0 auto;padding:24px}
+    header{
+      background:linear-gradient(180deg,var(--white),var(--rose-200));
+      position:sticky;top:0;z-index:10;border-bottom:1px solid #eee
+    }
+    .brand{
+      display:flex;align-items:center;gap:14px;padding:14px 0;
+    }
+    .logo{
+      width:44px;height:44px;border-radius:50%;
+      background: radial-gradient(120% 120% at 80% 10%, var(--rose) 0%, var(--rose-300) 50%, var(--white) 100%);
+      box-shadow:var(--shadow);
+    }
+    .brand h1{font-size:1.2rem;letter-spacing:.02em;margin:0}
+    .hero{
+      display:grid;grid-template-columns:1.1fr .9fr;gap:26px;align-items:center;
+      padding:40px 0 10px 0;
+    }
+    .tag{display:inline-flex;gap:8px;align-items:center;background:var(--rose-300);padding:10px 14px;border-radius:999px;color:#5b4f53}
+    .title{font-size:clamp(28px,4vw,42px);margin:16px 0 8px 0;line-height:1.15}
+    .subtitle{color:var(--muted);margin:0 0 20px 0}
+    .card{
+      background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px;
+    }
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:10px;
+      background:var(--rose);color:#2c2326;border:none;border-radius:12px;
+      padding:14px 18px;font-weight:700;cursor:pointer;transition:.2s; text-decoration:none
+    }
+    .btn:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(231,195,203,.35)}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+    .section{padding:36px 0}
+    .section h2{font-size:clamp(22px,3.2vw,30px);margin:0 0 16px 0}
+    .muted{color:var(--muted)}
+    /* До/после */
+    .before-after{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .ba-card{overflow:hidden;border-radius:16px;background:var(--white);box-shadow:var(--shadow)}
+    .ba-card img{display:block;width:100%;height:280px;object-fit:cover}
+    .ba-card small{display:block;padding:10px 12px;color:var(--muted)}
+    /* Форма */
+    form{display:grid;gap:14px}
+    label{font-size:.95rem}
+    input, select, textarea{
+      width:100%;background:#fff;border:1px solid #eadfe2;border-radius:12px;padding:12px 14px;
+      outline:none;font:inherit
+    }
+    input:focus, select:focus, textarea:focus{border-color:var(--rose)}
+    .inline{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    /* Карта */
+    .map{border:0;width:100%;height:360px;border-radius:16px;box-shadow:var(--shadow)}
+    footer{padding:26px 0;color:var(--muted);text-align:center}
+    /* Плавающая кнопка WhatsApp */
+    .wa{
+      position:fixed;right:18px;bottom:18px;z-index:50;background:#25D366;color:#fff;
+      width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+      box-shadow:0 10px 25px rgba(37,211,102,.4);text-decoration:none;font-weight:800;font-size:24px;
+    }
+    @media (max-width:900px){
+      .hero{grid-template-columns:1fr}
+      .before-after{grid-template-columns:1fr}
+      .grid-2{grid-template-columns:1fr}
+      .ba-card img{height:220px}
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="container brand">
+    <div class="logo" aria-hidden="true"></div>
+    <h1>Elsea Esthetic · Réservation</h1>
+  </div>
+</header>
+
+<main class="container">
+  <!-- HERO -->
+  <section class="hero">
+    <div>
+      <span class="tag">Beauté douce · Poudre de rose</span>
+      <h2 class="title">Microshading, lèvres & soins visage — réservez en deux clics</h2>
+      <p class="subtitle">Adresse: 4 Impasse de Rigny, Joué-lès-Tours. Bientôt aussi à Druye.</p>
+      <a class="btn" href="#booking">Prendre rendez-vous</a>
+    </div>
+
+    <!-- Карточка записи -->
+    <div class="card" id="booking">
+      <h3 style="margin:0 0 10px 0">Réserver en ligne</h3>
+      <p class="muted" style="margin-top:0">Choisissez la prestation, la date et laissez votre contact — я свяжусь с вами для подтверждения.</p>
+
+      <form id="form">
+        <div class="inline">
+          <div>
+            <label>Votre prénom et nom</label>
+            <input required id="name" placeholder="Ex. Marie Dupont">
+          </div>
+          <div>
+            <label>Téléphone (WhatsApp)</label>
+            <input required id="phone" placeholder="+33 6 …">
+          </div>
+        </div>
+
+        <div class="inline">
+          <div>
+            <label>Date</label>
+            <input required id="date" type="date">
+          </div>
+          <div>
+            <label>Heure</label>
+            <input required id="time" type="time">
+          </div>
+        </div>
+
+        <div class="inline">
+          <div>
+            <label>Lieu</label>
+            <select id="location">
+              <option value="Joué-lès-Tours — 4 Impasse de Rigny">Joué-lès-Tours — 4 Impasse de Rigny</option>
+              <!-- Добавим Druye позже:
+              <option value="Druye — [адрес]">Druye — [адрес]</option>
+              -->
+            </select>
+          </div>
+          <div>
+            <label>Prestation</label>
+            <select id="service">
+              <option>Microshading sourcils</option>
+              <option>Maquillage permanent des lèvres</option>
+              <option>Eyeliner & inter-cils</option>
+              <option>Soin LPG visage</option>
+            </select>
+          </div>
+        </div>
+
+        <label>Message (optionnel)</label>
+        <textarea id="note" rows="3" placeholder="Vos souhaits, questions…"></textarea>
+
+        <div class="inline">
+          <button type="submit" class="btn">Envoyer via WhatsApp</button>
+          <a class="btn" style="background:#fff;border:1px solid #eadfe2"
+             href="tel:+33622929178">Appeler: +33 6 22 92 91 78</a>
+        </div>
+        <p class="muted" style="margin:8px 0 0 0;font-size:.9rem">En cliquant, vous ouvrirez WhatsApp avec un message prérempli. Я отвечу как можно быстрее.</p>
+      </form>
+    </div>
+  </section>
+
+  <!-- ДО / ПОСЛЕ -->
+  <section class="section">
+    <h2>Avant / Après</h2>
+    <p class="muted">Живые, естественные результаты — мягкая «пудровая» растушёвка в пыльно-розовых оттенках.</p>
+    <div class="before-after">
+      <figure class="ba-card">
+        <img src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?q=80&w=1200&auto=format&fit=crop" alt="Avant/Après sourcils">
+        <small>Microshading — sourcils</small>
+      </figure>
+      <figure class="ba-card">
+        <img src="https://images.unsplash.com/photo-1556228724-4c1d2c0f3fbb?q=80&w=1200&auto=format&fit=crop" alt="Avant/Après lèvres">
+        <small>Maquillage permanent — lèvres</small>
+      </figure>
+    </div>
+    <p class="muted" style="margin-top:10px">Замените эти фото своими: просто поменяйте ссылки в теге <code>&lt;img src=...&gt;</code>.</p>
+  </section>
+
+  <!-- КАРТА -->
+  <section class="section">
+    <h2>Nous trouver</h2>
+    <div class="grid-2">
+      <div class="card">
+        <p><strong>Joué-lès-Tours</strong><br>4 Impasse de Rigny</p>
+        <p class="muted">Parking facile. Tram proche. Bientôt — rendez-vous à Druye.</p>
+      </div>
+      <iframe class="map"
+        src="https://www.google.com/maps?q=4%20Impasse%20de%20Rigny%2C%20Jou%C3%A9-l%C3%A8s-Tours&output=embed"
+        loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+    </div>
+  </section>
+</main>
+
+<footer>
+  © <span id="year"></span> Elsea Esthetic — Tous droits réservés • <a href="https://wa.me/33622929178" target="_blank" rel="noopener">WhatsApp</a>
+</footer>
+
+<!-- Плавающая WhatsApp-кнопка -->
+<a class="wa" href="https://wa.me/33622929178" aria-label="WhatsApp">✆</a>
+
+<script>
+  // Год в футере
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Отправка в WhatsApp с заполненными полями
+  const form = document.getElementById('form');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('name').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const date = document.getElementById('date').value;
+    const time = document.getElementById('time').value;
+    const loc  = document.getElementById('location').value;
+    const srv  = document.getElementById('service').value;
+    const note = document.getElementById('note').value.trim();
+
+    const txt = `Bonjour! Je souhaite prendre rendez-vous.\n`+
+      `Nom: ${name}\n`+
+      `Téléphone: ${phone}\n`+
+      `Prestation: ${srv}\n`+
+      `Date & heure: ${date} ${time}\n`+
+      `Lieu: ${loc}\n`+
+      (note ? `Message: ${note}\n` : ``);
+
+    const url = "https://wa.me/33622929178?text=" + encodeURIComponent(txt);
+    window.open(url, "_blank");
+  });
+</script>
+</body>
 </html>
