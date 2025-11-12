@@ -222,6 +222,113 @@
       </div>
     </div>
   </section>
+
+  <!-- PRICES + CART -->
+<section class="section">
+  <h2>Tarifs & Sélection</h2>
+
+  <!-- Прайс-лист: кнопка "Ajouter" добавляет в заказ -->
+  <div class="services">
+
+    <!-- REHAUSSEMENT -->
+    <div class="svc">
+      <h3>Rehaussement de cils / Coréen Premium / + Teinture + Soin Kératine</h3>
+      <p>1h — <strong>50 €</strong></p>
+      <button class="btn add" data-name="Rehaussement de cils (Coréen Premium + teinture + kératine)" data-price="50">Ajouter</button>
+    </div>
+
+    <!-- BLANCHIMENT DENTAIRE ESTHÉTIQUE -->
+    <div class="svc">
+      <h3>Blanchiment dentaire esthétique</h3>
+      <p>1h — <strong>60 €</strong></p>
+      <button class="btn add" data-name="Blanchiment dentaire esthétique" data-price="60">Ajouter</button>
+    </div>
+    <div class="svc">
+      <h3>Blanchiment dentaire esthétique — 2ᵉ séance</h3>
+      <p>1h — <strong>40 €</strong></p>
+      <button class="btn add" data-name="Blanchiment dentaire esthétique — 2e séance" data-price="40">Ajouter</button>
+    </div>
+
+    <!-- PIGMENTATION DES LÈVRES -->
+    <div class="svc">
+      <h3>Maquillage semi-permanent — Lèvres (éclat naturel)</h3>
+      <p>3h30 — <strong>180 €</strong></p>
+      <button class="btn add" data-name="Lèvres — effet naturel" data-price="180">Ajouter</button>
+    </div>
+    <div class="svc">
+      <h3>Maquillage semi-permanent — Lèvres (couleur intense)</h3>
+      <p>4h — <strong>200 €</strong></p>
+      <button class="btn add" data-name="Lèvres — couleur intense" data-price="200">Ajouter</button>
+    </div>
+    <div class="svc">
+      <h3>Retouche lèvres — supplémentaire (jusqu’à 3 mois)</h3>
+      <p>3h — <strong>100 €</strong></p>
+      <button class="btn add" data-name="Retouche lèvres — jusqu’à 3 mois" data-price="100">Ajouter</button>
+    </div>
+    <div class="svc">
+      <h3>Retouche lèvres — annuelle (6 à 12 mois)</h3>
+      <p>3h30 — <strong>130 €</strong></p>
+      <button class="btn add" data-name="Retouche lèvres — annuelle (6–12 mois)" data-price="130">Ajouter</button>
+    </div>
+    <div class="svc">
+      <h3>Retouche lèvres — tardive (au-delà de 12 mois)</h3>
+      <p>4h — <strong>160 €</strong></p>
+      <button class="btn add" data-name="Retouche lèvres — tardive (>12 mois)" data-price="160">Ajouter</button>
+    </div>
+    <div class="svc">
+      <h3>Retouche lèvres — incluse (à effectuer entre 4 et 8 semaines)</h3>
+      <p>2h30 — <strong>70 €</strong></p>
+      <button class="btn add" data-name="Retouche lèvres — incluse (4–8 semaines)" data-price="70">Ajouter</button>
+    </div>
+
+    <!-- ARCHITECTURE & MICROSHADING / SOURCILS -->
+    <div class="svc">
+      <h3>Microshading (poudrés / ombrés) — Sourcils</h3>
+      <p>3h — <strong>180 €</strong></p>
+      <button class="btn add" data-name="Sourcils — Microshading (poudrés/ombrés)" data-price="180">Ajouter</button>
+    </div>
+    <div class="svc">
+      <h3>Retouche sourcils — incluse (à effectuer entre 4 et 8 semaines)</h3>
+      <p>2h — <strong>50 €</strong></p>
+      <button class="btn add" data-name="Retouche sourcils — incluse (4–8 semaines)" data-price="50">Ajouter</button>
+    </div>
+    <div class="svc">
+      <h3>Retouche sourcils — supplémentaire (jusqu’à 3 mois)</h3>
+      <p>2h — <strong>70 €</strong></p>
+      <button class="btn add" data-name="Retouche sourcils — jusqu’à 3 mois" data-price="70">Ajouter</button>
+    </div>
+    <div class="svc">
+      <h3>Retouche sourcils — annuelle (6 à 12 mois)</h3>
+      <p>2h30 — <strong>120 €</strong></p>
+      <button class="btn add" data-name="Retouche sourcils — annuelle (6–12 mois)" data-price="120">Ajouter</button>
+    </div>
+    <div class="svc">
+      <h3>Retouche sourcils — tardive (au-delà de 12 mois)</h3>
+      <p>3h — <strong>150 €</strong></p>
+      <button class="btn add" data-name="Retouche sourcils — tardive (>12 mois)" data-price="150">Ajouter</button>
+    </div>
+  </div>
+
+  <!-- Корзина/выбор клиента -->
+  <div class="card" style="margin-top:18px">
+    <h3>Votre sélection</h3>
+    <div id="cart-empty" class="muted">Rien pour l’instant. Choisissez une prestation ci-dessus et cliquez « Ajouter ».</div>
+    <ul id="cart" style="list-style:none;padding:0;margin:10px 0;display:none"></ul>
+
+    <div class="inline">
+      <div>
+        <label>Code promo / Remise</label>
+        <input id="discount" placeholder="ex : -25% ou 20 (euros)">
+      </div>
+      <div>
+        <label>Total estimé</label>
+        <input id="total" disabled placeholder="— €">
+      </div>
+    </div>
+    <small class="muted">Скидка может быть в процентах (например, <b>-25%</b>) или фиксированной суммой (<b>20</b> €).</small>
+  </div>
+</section>
+
 </main>
 
 <footer>
