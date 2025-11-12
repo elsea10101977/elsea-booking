@@ -453,5 +453,50 @@ ${note ? `\nMessage: ${note}\n` : ''}`;
   });
 </script>
 </body>
+  <!-- MAPS / ADRESSES -->
+<section class="section" id="maps">
+  <h2>Nos adresses</h2>
+  <p style="text-align:center;margin-bottom:15px">
+    Choisissez votre lieu de rendez-vous :
+  </p>
+
+  <div class="tabs" style="text-align:center;margin-bottom:20px">
+    <button class="tab active" data-map="jt">Joué-lès-Tours</button>
+    <button class="tab" data-map="dr">Druye</button>
+  </div>
+
+  <div id="map-jt" class="map-container" style="display:block">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2747.0040806652124!2d0.6424950158388316!3d47.34028997916878!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47fcb5b2d6a45ed5%3A0xf46a9ea6a2a2a2b9!2s4%20Impasse%20de%20Rigny%2C%2037300%20Jou%C3%A9-l%C3%A8s-Tours!5e0!3m2!1sfr!2sfr!4v1700000000000"
+      width="100%" height="400" style="border:0;border-radius:16px"
+      allowfullscreen="" loading="lazy"></iframe>
+  </div>
+
+  <div id="map-dr" class="map-container" style="display:none">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2749.688405690822!2d0.5231434763246696!3d47.3130187725171!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47fcb50374b3a2bb%3A0x6dba438a8b0a25a6!2s3%20Rue%20des%20Vignes%20de%20Renault%2C%2037130%20Druye!5e0!3m2!1sfr!2sfr!4v1700000000001"
+      width="100%" height="400" style="border:0;border-radius:16px"
+      allowfullscreen="" loading="lazy"></iframe>
+  </div>
+</section>
+<script>
+  const tabs = document.querySelectorAll('.tab');
+  const mapJT = document.getElementById('map-jt');
+  const mapDR = document.getElementById('map-dr');
+  tabs.forEach(t => t.addEventListener('click', () => {
+    tabs.forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    if (t.dataset.map === 'jt') {
+      mapJT.style.display = 'block';
+      mapDR.style.display = 'none';
+    } else {
+      mapJT.style.display = 'none';
+      mapDR.style.display = 'block';
+    }
+  }));
+</script>
+</body>
+</html>
+
 </html>
 
