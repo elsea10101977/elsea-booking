@@ -99,40 +99,6 @@
       <a class="btn" href="#booking">Prendre rendez-vous</a>
     </div>
 
-    <div class="card" id="booking">
-      <h2>Réserver en ligne</h2>
-      <form id="form">
-        <div class="inline">
-          <div><label>Prénom & nom</label><input id="name" required></div>
-          <div><label>Téléphone (WhatsApp)</label><input id="phone" required></div>
-        </div>
-        <div class="inline">
-          <div><label>Date</label><input id="date" type="date" required></div>
-          <div><label>Heure</label><input id="time" type="time" required></div>
-        </div>
-        <div class="inline">
-          <div>
-            <label>Lieu</label>
-            <select id="location">
-              <option value="Joué-lès-Tours — 4 Impasse de Rigny">Joué-lès-Tours — 4 Impasse de Rigny</option>
-              <option value="Druye — 3 Rue des Vignes de Renault">Druye — 3 Rue des Vignes de Renault</option>
-            </select>
-          </div>
-          <div>
-            <label>Prestation</label>
-            <select id="service">
-              <option>Microshading des sourcils</option>
-              <option>Maquillage permanent des lèvres</option>
-              <option>Rehaussement de cils coréen (Premium)</option>
-              <option>Blanchiment dentaire esthétique (1h)</option>
-            </select>
-          </div>
-        </div>
-        <label>Message (optionnel)</label>
-        <textarea id="note" rows="3" placeholder="Vos souhaits, questions…"></textarea>
-        <button class="btn" type="submit">Envoyer via WhatsApp</button>
-      </form>
-    </div>
   </section>
   
   <!-- PRICES + CART -->
@@ -238,6 +204,55 @@
       </div>
     </div>
     <small class="muted">Скидка может быть в процентах (например, <b>-25%</b>) или фиксированной суммой (<b>20</b> €).</small>
+  </div>
+</section>
+<!-- RESERVATION -->
+<section class="section" id="reserve">
+  <h2>Réservation</h2>
+  <div class="card">
+    <form id="reserve-form">
+      <div class="inline">
+        <div>
+          <label>Prénom & nom</label>
+          <input id="r-name" required placeholder="Ex. Marie Dupont">
+        </div>
+        <div>
+          <label>Téléphone (WhatsApp)</label>
+          <input id="r-phone" required placeholder="+33 6 …">
+        </div>
+      </div>
+
+      <div class="inline">
+        <div>
+          <label>Date</label>
+          <input id="r-date" type="date" required>
+        </div>
+        <div>
+          <label>Heure</label>
+          <input id="r-time" type="time" required>
+        </div>
+      </div>
+
+      <div class="inline">
+        <div>
+          <label>Lieu</label>
+          <select id="r-location">
+            <option>Joué-lès-Tours — 4 Impasse de Rigny</option>
+            <option>Druye — 3 Rue des Vignes de Renault</option>
+          </select>
+        </div>
+        <div>
+          <label>Total estimé</label>
+          <input id="r-total" disabled placeholder="— €">
+        </div>
+      </div>
+
+      <label>Message (optionnel)</label>
+      <textarea id="r-note" rows="3" placeholder="Vos souhaits, questions…"></textarea>
+
+      <button class="btn" type="submit">Confirmer via WhatsApp</button>
+      <p class="muted" style="margin:.5rem 0 0">Aucune avance n’est débitée. Confirmation personnelle après votre message.</p>
+    </form>
   </div>
 </section>
 
@@ -407,6 +422,144 @@ ${note ? `\nMessage: ${note}\n` : ''}`;
     }
   }));
 </script>
+
+  <script>
+  // год в футере
+  const y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
+
+  // ===== КАРТЫ (внизу страницы)
+  const mapsSection = document.getElementById('maps');
+  if (mapsSection) {
+    const tabs = mapsSection.querySelectorAll('.tab');
+    const mapJT = mapsSection.querySelector('#map-jt');
+    const mapDR = mapsSection.querySelector('#map-dr');
+    tabs.forEach((t) => {
+      t.addEventListener('click', () => {
+        tabs.forEach(x => x.classList.remove('active'));
+        t.classList.add('active');
+        const key = t.dataset.map;
+        if (key === 'jt') { mapJT.style.display = 'block'; mapDR.style.display = 'none'; }
+        else { mapJT.style.display = 'none'; mapDR.style.display = 'block'; }
+      });
+    });
+  }
+
+  // ===== ПРАЙС + КОРЗИНА
+  const cartEl = document.getElementById('cart');
+  const cartEmptyEl = document.getElementById('cart-empty');
+  const discountEl = document.getElementById('discount');
+  const totalEl = document.getElementById('total');
+  const addBtns = document.querySelectorAll('.add');
+
+  const cart = []; // [{name, price}]
+  function format(n){ return `${n.toFixed(2)} €`; }
+
+  function calcTotal(){
+    const base = cart.reduce((s,i)=>s + (i.price||0), 0);
+    const d = (discountEl?.value || '').trim();
+    let final = base;
+    if (d){
+      const pct = d.match(/-?\s*(\d{1,3})\s*%/);
+      const eur = d.match(/-?\s*(\d+(?:[.,]\d+)*)\s*€?$/);
+      if (pct){ final = Math.max(0, base * (1 - Number(pct[1])/100)); }
+      else if (eur){ final = Math.max(0, base - Number(String(eur[1]).replace(',', '.'))); }
+    }
+    if (totalEl) totalEl.value = format(final);
+    // продублируем в блоке Réservation
+    const rTotal = document.getElementById('r-total');
+    if (rTotal) rTotal.value = format(final);
+    return { base, final, discountText: d };
+  }
+
+  function renderCart(){
+    if (!cartEl || !cartEmptyEl){ calcTotal(); return; }
+    cartEl.innerHTML = '';
+    if(cart.length===0){
+      cartEl.style.display='none';
+      cartEmptyEl.style.display='block';
+      calcTotal();
+      return;
+    }
+    cartEl.style.display='block';
+    cartEmptyEl.style.display='none';
+    cart.forEach((item, idx)=>{
+      const li = document.createElement('li');
+      li.style.display='flex';
+      li.style.alignItems='center';
+      li.style.justifyContent='space-between';
+      li.style.gap='10px';
+      li.style.padding='10px 0';
+      li.style.borderBottom='1px solid #f0e7ea';
+      li.innerHTML = `<span>${item.name}</span><div style="display:flex;align-items:center;gap:10px"><strong>${format(item.price)}</strong><button aria-label="remove" data-i="${idx}" class="tab">✕</button></div>`;
+      cartEl.appendChild(li);
+    });
+    calcTotal();
+  }
+
+  addBtns.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      cart.push({ name: btn.dataset.name, price: Number(btn.dataset.price) });
+      renderCart();
+      // ПОСЛЕ ДОБАВЛЕНИЯ — скроллим к Réservation
+      const reserve = document.getElementById('reserve');
+      if (reserve) reserve.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  if (cartEl){
+    cartEl.addEventListener('click', (e)=>{
+      const i = e.target?.dataset?.i;
+      if(i !== undefined){
+        cart.splice(Number(i),1);
+        renderCart();
+      }
+    });
+  }
+
+  discountEl?.addEventListener('input', calcTotal);
+  calcTotal();
+
+  // ===== НОВАЯ ФОРМА РЕЗЕРВИРОВАНИЯ
+  const rForm = document.getElementById('reserve-form');
+  if (rForm){
+    rForm.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const name = document.getElementById('r-name').value.trim();
+      const phone= document.getElementById('r-phone').value.trim();
+      const date = document.getElementById('r-date').value;
+      const time = document.getElementById('r-time').value;
+      const loc  = document.getElementById('r-location').value;
+      const note = (document.getElementById('r-note')?.value || '').trim();
+      const { base, final, discountText } = calcTotal();
+
+      const list = cart.length ? cart.map((i,idx)=>`${idx+1}. ${i.name} — ${format(i.price)}`).join('\n') : '—';
+
+      const txt =
+`Bonjour! Je souhaite prendre rendez-vous.
+Nom: ${name}
+Téléphone: ${phone}
+Date & heure: ${date} ${time}
+Lieu: ${loc}
+
+Prestations choisies:
+${list}
+
+Sous-total: ${format(base)}
+${discountText ? `Remise: ${discountText}\n` : ''}Total estimé: ${format(final)}
+${note ? `\nMessage: ${note}\n` : ''}`;
+
+      window.open("https://wa.me/33622929178?text=" + encodeURIComponent(txt), "_blank");
+
+      // синхронизация локации с картами (если они есть)
+      if (mapsSection){
+        const wantDr = (loc || '').toLowerCase().includes('druye');
+        const btn = mapsSection.querySelector(`.tab[data-map="${wantDr ? 'dr' : 'jt'}"]`);
+        btn?.click();
+      }
+    });
+  }
+</script>
+
 </body>
 </html>
 
