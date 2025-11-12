@@ -218,7 +218,7 @@
         </div>
         <div>
           <label>Téléphone (WhatsApp)</label>
-          <input id="r-phone" required placeholder="+33 6 …">
+          <input id="r-phone" required placeholder="+33 …">
         </div>
       </div>
 
@@ -247,6 +247,10 @@
         </div>
       </div>
 
+      <label>Prestations choisies</label>
+<div id="r-services" style="background:#fff9fa;border:1px solid #f1dfe2;border-radius:12px;padding:12px 16px;margin-bottom:14px;font-size:15px;color:#444">
+  <em>Aucune prestation sélectionnée pour l’instant</em>
+</div>
       <label>Message (optionnel)</label>
       <textarea id="r-note" rows="3" placeholder="Vos souhaits, questions…"></textarea>
 
@@ -493,6 +497,16 @@ ${note ? `\nMessage: ${note}\n` : ''}`;
       li.innerHTML = `<span>${item.name}</span><div style="display:flex;align-items:center;gap:10px"><strong>${format(item.price)}</strong><button aria-label="remove" data-i="${idx}" class="tab">✕</button></div>`;
       cartEl.appendChild(li);
     });
+    // Обновляем блок в форме Réservation
+const rBlock = document.getElementById('r-services');
+if (rBlock) {
+  if (cart.length === 0) {
+    rBlock.innerHTML = '<em>Aucune prestation sélectionnée pour l’instant</em>';
+  } else {
+    rBlock.innerHTML = cart.map((i,idx)=>`${idx+1}. ${i.name} — ${format(i.price)}`).join('<br>');
+  }
+}
+
     calcTotal();
   }
 
