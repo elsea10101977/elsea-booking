@@ -20,6 +20,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Elsea Esthetic — Réservation</title>
+  <!-- Подключаем шрифты -->
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
   <meta name="description" content="Elsea Esthetic · Microshading, maquillage permanent, rehaussement coréen, blanchiment dentaire esthétique. Joué-lès-Tours & Druye. Réservez en ligne.">
 
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Manrope:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -89,6 +92,53 @@
       .grid-2,.services,.ba{grid-template-columns:1fr}
       .ba img{height:220px}
     }
+    /* Brand (как на визитке) */
+.brand {
+  font-family: 'Great Vibes', cursive;
+  font-size: clamp(40px, 6vw, 60px);
+  line-height: 1.05;
+  letter-spacing: 0.3px;
+  color: #7a4c58;
+  text-align: center;
+}
+
+/* Подзаголовок */
+.tagline {
+  display: block;
+  text-align: center;
+  margin-top: 5px;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(14px, 2.5vw, 18px);
+  color: #7a4c58;
+  opacity: 0.9;
+}
+
+/* Список услуг */
+.hero-list {
+  list-style: none;
+  margin: 20px auto 15px;
+  padding: 0;
+  text-align: left;
+  max-width: 600px;
+}
+
+.hero-list li {
+  position: relative;
+  padding-left: 18px;
+  margin: 6px 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.1rem;
+  color: #2b2330;
+}
+
+.hero-list li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #c37c83;
+  font-size: 18px;
+}
+
   </style>
 </head>
   <!-- Fonts for brand + body -->
@@ -102,21 +152,16 @@
      <!-- ЛОГОТИП + ОПИСАНИЕ -->
 <div style="text-align:center; margin-top:20px; margin-bottom:10px;">
   <h1 style="font-family:'Great Vibes', cursive; font-size:3rem; color:#7a4c58; margin-bottom:0;">
-    Elsea Esthetic
-  </h1>
-  <p style="font-family:'Raleway', sans-serif; font-size:1.2rem; color:#7a4c58; margin-top:5px;">
-    Elena votre maquilleuse permanent
-  </p>
-</div>
+    <h1 class="brand">Elsea Esthetic</h1>
+<span class="tagline">Elena votre maquilleuse permanent</span>
 
-<!-- СПИСОК УСЛУГ -->
-<div style="text-align:left; max-width:600px; margin:0 auto 15px auto; padding-left:10px;">
-  <p class="service-title">• Microshading</p>
-  <p class="service-title">• Maquillage permanent des lèvres</p>
-  <p class="service-title">• Rehaussement coréen</p>
-  <p class="service-title">• Blanchiment dentaire esthétique</p>
-  <p style="font-family:'Raleway', sans-serif; font-size:1rem; color:#7a4c58; margin-top:5px;">
-    — réservez en deux clics —
+<ul class="hero-list">
+  <li>Microshading</li>
+  <li>Maquillage permanent des lèvres</li>
+  <li>Rehaussement coréen</li>
+  <li>Blanchiment dentaire esthétique — réservez en deux clics</li>
+</ul>
+
   </p>
 </div>
 
